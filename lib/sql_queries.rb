@@ -26,12 +26,10 @@ def selects_the_user_name_age_and_pledge_amount_for_all_pledges_alphabetized_by_
 end
 
 def selects_the_titles_and_amount_over_goal_of_all_projects_that_have_met_their_funding_goal
-  "ALTER TABLE projects ADD COLUMN amount_over INTEGER
-  SET    projects.amount_over =  (SELECT   SUM(pledges.amount)
-                          FROM    pledges
-                          GROUP BY pledges.project_id) - projects.funding_goal
-  SELECT projects.title, projects.amount_over FROM projects
-  WHERE (SUM(pledges.amount) - projects.funding_goal) > 0
+  "SELECT projects.title, SUM(pledges.amount) FROM projects
+  INNER JOIN pledges
+  ON projects.id = pledges.project_id
+  HAVING (SUM(pledges.amount) - projects.funding_goal) > 0
   GROUP BY projects.title;"
 end
 
