@@ -27,8 +27,7 @@ end
 
 def selects_the_titles_and_amount_over_goal_of_all_projects_that_have_met_their_funding_goal
   "ALTER TABLE projects ADD COLUMN amount_over INTEGER
-  UPDATE projects
-  SET    amount_over =  (SELECT   SUM(pledges.amount)
+  SET    projects.amount_over =  (SELECT   SUM(pledges.amount)
                           FROM    pledges
                           GROUP BY pledges.project_id) - projects.funding_goal
   SELECT projects.title, projects.amount_over FROM projects
